@@ -2,15 +2,9 @@
 #include "Game.h"
 #include "Configuration.h"
 
-Game::Game(int x , int y ) : _x(x), _y(y), _window(sf::VideoMode(_x, _y), "Koasiarka")//, _area(0,0,x,y)
+Game::Game(int x , int y ) : _x(x), _y(y), _window(sf::VideoMode(_x, _y), "Koasiarka"), _World(x, y)//, _area(0,0,x,y)
 {
 	_window.setVerticalSyncEnabled(true);
-	Player _player;
-	_grass = Configuration::_textures.get(Configuration::Textures::Grass_tall);	//reference to texture
-	_bcg.setTexture(_grass);	// big sprite with long grass
-	_dirt.create(32, 32, sf::Color::Blue);
-	//sf::Sprite _area(Configuration::_textures.get(Configuration::Textures::Grass_cut), _player.getbounds()); // sprite with cut grass
-	
 }
 
 void Game::run(int min_fps)
@@ -25,7 +19,7 @@ void Game::run(int min_fps)
 			timeSinceLastUpdate -= TimePerFrame;
 			update(TimePerFrame);
 		}
-		update(timeSinceLastUpdate);
+ 		update(timeSinceLastUpdate);
 		render();
 	}
 }
@@ -33,10 +27,7 @@ void Game::run(int min_fps)
 void Game::render()
 {
 	_window.clear();
-	_window.draw(_bcg);
-	
-	_window.draw(_player);
-	//_window.draw(_area);
+	_window.draw(_World);
 	_window.display();
 }
 
@@ -52,37 +43,54 @@ void Game::processEvents()
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 				_window.close();
-			else if (event.key.code == sf::Keyboard::Up)
-			{
-				_player._isMoving = true;
-				_player._speed = sf::Vector2f(0, -100);
-			}
-			else if (event.key.code == sf::Keyboard::Down)
-			{
-				_player._isMoving = true;
-				_player._speed = sf::Vector2f(0, 100);
-			}
-			else if (event.key.code == sf::Keyboard::Left)
-			{
-				_player._isMoving = true;
-				_player._speed = sf::Vector2f(-100, 0);
-			}
-			else if (event.key.code == sf::Keyboard::Right)
-			{
-				_player._isMoving = true;
-				_player._speed = sf::Vector2f(100, 0);
-			}
+			//else if (event.key.code == sf::Keyboard::Up)
+			//{
+			//	Configuration::player->_isMoving = true;
+			//	//Configuration::player->_speed = sf::Vector2f(0, -100);
+			//}
+			///*else if (event.key.code == sf::Keyboard::Down)
+			//{
+			//	Configuration::player->_isMoving = true;
+			//	Configuration::player->_speed = sf::Vector2f(0, 100);
+			//}*/
+			//else if (event.key.code == sf::Keyboard::Left)
+			//{
+			//	Configuration::player->rotation = -1;
+			//}
+			//else if (event.key.code == sf::Keyboard::Right)
+			//{
+			//	Configuration::player->rotation = 1;
+			//}
 		}
+		
 	}
+	//Configuration::player->processEvents();
 }
 
 void Game::update(sf::Time deltaTime)
 {
-	//sf::Sprite temp(Configuration::_textures.get(Configuration::Textures::Grass_cut), _player.getbounds());
-	//_area = temp;
-	//_area.move(_player.getPosition());
-	_player.update(deltaTime);
-	_grass.update(_dirt, _player.getPosition().x, _player.getPosition().y);	// draw cut grass
+	if (Configuration::player == nullptr)
+	{
+		Configuration::player = new Player(_World);
+		Configuration::player->setPosition(_World.getX() / 2, _World.getY() / 2);
+		_World.add(Configuration::player);
+	}
+	if (Configuration::_mine_timer > Configuration::_mine_interval) // mine adding
+	{
+		//res_1600(eng);
+		//res_900(eng);
+		Entity* mine(new Mine(_World));
+		mine->setPosition(sf::Vector2f(res_1600(eng), res_900(eng)));
+		while (_World.isCollide(*mine))
+		{
+			mine->setPosition(sf::Vector2f(res_1600(eng), res_900(eng))); // ujednolicic randomy
+		}
+		_World.add(mine);
+		Configuration::_mine_timer = 0;
+	}
+	//Configuration::player->update(deltaTime);
+	_World.update(deltaTime);
+	
 }
 
 const int Game::getX() const

@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Entity.h"
-
+#include "Mine.h"
 class Entity;
+class Mine;
 class World : public sf::Drawable
 {
 public:
@@ -16,6 +17,7 @@ public:
 	bool isCollide(const Entity& other);
 	int size();
 
+	void add(Configuration::Sounds sound_id);
 
 	const std::list<Entity*> getEntities()const;
 	int getX()const;
@@ -24,6 +26,8 @@ public:
 private:
 	std::list<Entity*> _entities;
 	
+	std::list < std::unique_ptr<sf::Sound>> _sounds;
+	sf::Sprite _background;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	const int _x;
 	const int _y;

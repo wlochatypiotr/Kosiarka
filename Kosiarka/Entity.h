@@ -1,6 +1,7 @@
 #pragma once
 #include "Configuration.h"
 #include "SFML\Graphics.hpp"
+#include "Collision.h"
 
 class World;
 class Entity : public sf::Drawable
@@ -21,7 +22,8 @@ public:
 	virtual void onDestroy();
 protected:
 
-
+	friend class Player;
+	friend class Mine;
 	sf::Sprite _sprite;
 	sf::Vector2f _speed;
 	World& _world;
