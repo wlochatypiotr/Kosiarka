@@ -98,7 +98,7 @@ void World::Update(sf::Time deltaTime)
 
 	const auto end = entities_.end();
 
-	for (auto it_i = entities_.begin(); it_i != end; ++it_i)	
+	for (auto it_i = entities_.begin(); it_i != end; ++it_i)	//ANALIZA !!!!!!!!
 	{
 		Entity& entity_i = **it_i;
 		auto it_j = it_i;			//it_j its an iterator to entity next to entity_i
@@ -108,8 +108,10 @@ void World::Update(sf::Time deltaTime)
 			Entity& entity_j = **it_j;
 
 			if (entity_i.is_alive() && entity_i.IsCollide(entity_j))
+			{
 				entity_i.OnDestroy();
-
+				entity_j.OnDestroy();
+			}
 			if (entity_j.is_alive() && entity_j.IsCollide(entity_i))
 				entity_j.OnDestroy();
 		}
@@ -140,10 +142,8 @@ void World::Update(sf::Time deltaTime)
 void World::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
 	target.draw(background_, states);
-	//target.draw(Configuration::score_text_, states);
-	//target.draw(Configuration::timer_text_, states);
+
 	for (Entity* entity : entities_)
 		target.draw(*entity, states);
-	target.draw(Configuration::score_text_, states);
-	target.draw(Configuration::timer_text_, states);
+	Configuration::Draw(target);
 }

@@ -36,6 +36,7 @@ float Configuration::mine_interval_ = 5;
 float Configuration::fruit_timer_;
 float Configuration::fruit_interval_ = 3;
 
+std::vector<sf::Sprite> Configuration::life_container_;
 sf::Clock Configuration::clock_;
 
 
@@ -43,6 +44,17 @@ sf::Clock Configuration::clock_;
 void Configuration::IncreaseScore(int points)
 {
 	score_ += points;
+}
+
+void Configuration::Draw(sf::RenderTarget & target)
+{
+	target.draw(score_text_);
+	target.draw(timer_text_);
+	if (player_lives_ > 0)
+		{
+		for (int i = 0; i != player_lives_; ++i)
+			 target.draw(life_container_[i]);
+		}
 }
 
 void Configuration::Initialize()
@@ -53,6 +65,7 @@ void Configuration::Initialize()
 	InitializeMusic();
 	InitializeFonts();
 	InitializeTexts();
+	InitializeLife();
 
 
 	music_.get(Configuration::Music::THEME).setLoop(true);
@@ -68,6 +81,7 @@ void Configuration::InitializeTextures()
 	textures_.load(SHEEP, "Media/Textures/Sheep.png");
 	textures_.load(GRASS, "media/Textures/Grass.jpg");
 	textures_.load(MINE, "Media/Textures/Mine.png");	
+	textures_.load(LIFE, "Media/Textures/Life.png");
 }
 
 void Configuration::InitializeMusic()
@@ -104,4 +118,19 @@ void Configuration::InitializeTexts()
 	timer_text_.setCharacterSize(40);
 	timer_text_.setColor(sf::Color::White);
 	timer_text_.setPosition(sf::Vector2f(20, 50));
+}
+
+void Configuration::InitializeLife()
+{
+	sf::Sprite life1(Configuration::textures_.get(LIFE));
+	sf::Sprite life2(Configuration::textures_.get(LIFE));
+	sf::Sprite life3(Configuration::textures_.get(LIFE));
+	
+	life1.setPosition(1540, 20);
+	life2.setPosition(1500, 20);
+	life3.setPosition(1460, 20);
+	
+	Configuration::life_container_.push_back(std::move(life1));
+	Configuration::life_container_.push_back(std::move(life2));
+	Configuration::life_container_.push_back(std::move(life3));
 }
