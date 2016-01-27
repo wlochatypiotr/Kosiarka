@@ -22,6 +22,9 @@ void World::Clear()
 	for (Entity* entity : entities_)
 		delete entity;
 	entities_.clear();
+	delete next_fruit_;
+	next_fruit_ = nullptr;
+	sounds_.clear();
 }
 
 bool World::IsCollide(const Entity & other)
@@ -48,6 +51,17 @@ void World::Add(Configuration::Sounds sound_id)
 const std::list<Entity*> World::get_entities() const
 {
 	return entities_;
+}
+
+void World::SetFruit(Entity * entity)
+{
+	if (next_fruit_ == nullptr)
+		next_fruit_ = entity;
+	if (!next_fruit_->is_alive())
+		{
+		delete next_fruit_;		// free memory of eaten fruit	
+		next_fruit_ = entity;	
+		}
 }
 
 int World::get_x() const
@@ -108,8 +122,10 @@ void World::Update(sf::Time deltaTime)
 			Entity& entity_j = **it_j;
 
 			if (entity_i.is_alive() && entity_i.IsCollide(entity_j))
+			{
 				entity_i.OnDestroy();
-
+				entity_j.OnDestroy();
+			}
 			if (entity_j.is_alive() && entity_j.IsCollide(entity_i))
 				entity_j.OnDestroy();
 		}
@@ -124,8 +140,13 @@ void World::Update(sf::Time deltaTime)
 		else
 			++it;
 	}
-
-
+	Player* pPlayer = Configuration::player_;
+	//auto player = entities_.begin(); // player nie jest entity no 2 po resecie !
+	if (next_fruit_ != nullptr && next_fruit_->is_alive() && next_fruit_->IsCollide((*Configuration::player_)))
+		next_fruit_->OnDestroy();
+	/*if(!next_fruit_->is_alive())
+		delete next_fruit_;
+*/
 	sounds_.remove_if([](const std::unique_ptr<sf::Sound>& sound) -> bool {		// remove unused sounds
 		return sound->getStatus() != sf::Sound::Status::Playing;
 	});
@@ -144,6 +165,8 @@ void World::draw(sf::RenderTarget & target, sf::RenderStates states) const
 	//target.draw(Configuration::timer_text_, states);
 	for (Entity* entity : entities_)
 		target.draw(*entity, states);
-	target.draw(Configuration::score_text_, states);
-	target.draw(Configuration::timer_text_, states);
+	target.draw(*next_fruit_);
+	//target.draw(Configuration::score_text_, states);
+	//target.draw(Configuration::timer_text_, states);
+	Configuration::Draw(target);
 }

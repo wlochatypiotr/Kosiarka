@@ -1,5 +1,6 @@
 #pragma once
 #include "Eatable.h"
+#include "Player.h"
 class Fruit : public Eatable
 {
 public:
@@ -7,6 +8,7 @@ public:
 	Fruit& operator= (const Fruit&) = delete;
 	using Eatable::Eatable;
 	virtual bool IsCollide(const Entity& other) const;
+	virtual bool IsCollide(const Player& other) const;
 	virtual void Update(sf::Time deltaTime);
 
 };
