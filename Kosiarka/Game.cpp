@@ -65,15 +65,15 @@ void Game::ProcessEvents()
 
 void Game::Update(sf::Time deltaTime)
 {
-	if (!Configuration::IsGameOver())
-	{
+	//if (!Configuration::IsGameOver())
+	//{
 		if (Configuration::player_ == nullptr)
 		{
 			Configuration::player_ = new Player(world_);
 			Configuration::player_->setPosition(sf::Vector2f(world_.get_x() / 2, world_.get_y() / 2));
 			world_.Add(Configuration::player_);
 		}
-		if (Configuration::fruit_ == nullptr)
+		if (world_.next_fruit_ == nullptr ||Eatable::count_ == 0)
 		{
 			Entity* fruit = nullptr;
 			int i = random_0_2(eng);
@@ -94,7 +94,7 @@ void Game::Update(sf::Time deltaTime)
 			{
 				fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng)));
 			}
-			Configuration::fruit_ = fruit;
+			world_.SetFruit(fruit);
 			world_.Add(fruit);
 		}
 	
@@ -139,13 +139,13 @@ void Game::Update(sf::Time deltaTime)
 		//Configuration::player->update(deltaTime);
 		world_.Update(deltaTime);
 	}
-}
+//}
 
 void Game::Reset()
 {
 	world_.Clear();
 	Configuration::player_ = nullptr;
-	Configuration::fruit_ = nullptr;
+	//Configuration::fruit_ = nullptr;
 	Configuration::Reset();
 }
 

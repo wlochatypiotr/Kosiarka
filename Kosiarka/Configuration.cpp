@@ -11,7 +11,7 @@ ResourceManager<sf::Font, int> Configuration::fonts_;
 
 
 Player* Configuration::player_ = nullptr;
-Entity* Configuration::fruit_ = nullptr;
+//Entity* Configuration::fruit_ = nullptr;
 
 //defines game difficulty
 
