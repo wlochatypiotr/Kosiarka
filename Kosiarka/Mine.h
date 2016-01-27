@@ -10,7 +10,7 @@ public:
 
 	Mine(World& world);
 
-	virtual bool isCollide(const Entity& other) const override;
-	virtual void update(sf::Time deltaTime);
-	virtual void onDestroy();
+	virtual bool IsCollide(const Entity& other) const override;
+	virtual void Update(sf::Time deltaTime);
+	virtual void OnDestroy();
 };

@@ -18,7 +18,7 @@ namespace Collision {
 	//////
 	/// Replaces Texture::loadFromFile
 	/// Load an imagefile into the given texture and create a bitmask for it
-	/// This is much faster than creating the bitmask for a texture on the first run of "PixelPerfectTest"
+	/// This is much faster than creating the bitmask for a texture on the first Run of "PixelPerfectTest"
 	/// 
 	/// The function returns false if the file could not be opened for some reason
 	//////

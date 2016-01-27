@@ -1,23 +1,23 @@
 #include "stdafx.h"
 #include "Mine.h"
 
-Mine::Mine(World& world) :  Entity(Configuration::Textures::Mine, world)
+Mine::Mine(World& world) :  Entity(Configuration::Textures::MINE, world)
 {
 
 }
 
-bool Mine::isCollide(const Entity & other) const
+bool Mine::IsCollide(const Entity & other) const
 {
-	return Collision::CircleTest(_sprite, other._sprite);
-	 //return	Collision::PixelPerfectTest(_sprite, other._sprite);
+	return Collision::CircleTest(sprite_, other.sprite_);
+	 //return	Collision::PixelPerfectTest(sprite_, other.sprite_);
 }
 
-void Mine::update(sf::Time deltaTime)
+void Mine::Update(sf::Time deltaTime)
 {
 }
 
-void Mine::onDestroy()
+void Mine::OnDestroy()
 {
-	Entity::onDestroy();
-	_world.add(Configuration::Sounds::Explosion);
+	Entity::OnDestroy();
+	world_.Add(Configuration::Sounds::EXPLOSION);
 }

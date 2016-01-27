@@ -2,7 +2,6 @@
 
 #include "ResourceManager.h"
 
-//#include "Random.h"
 class Player;
 class Configuration
 {
@@ -12,56 +11,75 @@ public:
 
 	Configuration() = delete;
 
+	static ResourceManager<sf::Font, int> fonts_;
+	enum Font
+	{
+		AIRSTRIKEB3D,
+		AIRSTRIKEACAD
+	};
 
-	static ResourceManager<sf::Music, int> _music;
+	static ResourceManager<sf::Music, int> music_;
 	enum Music : int
 	{
-		Theme
+		THEME
 	};
-	static ResourceManager<sf::Texture, int> _textures;
+	static ResourceManager<sf::Texture, int> textures_;
 	enum Textures
 	{
-		Grass,
-		Sheep,
-		Mine,
-		Fruit1,
-		Fruit2,
-		Fruit3
+		GRASS,
+		SHEEP,
+		MINE,
+		APPLE,
+		PEAR,
+		CHERRY
 	};
 
-	static ResourceManager<sf::SoundBuffer, int> _sounds;
+	static ResourceManager<sf::SoundBuffer, int> sounds_;
 	enum Sounds
 	{
-		Voice1,
-		Voice2,
+		VOICE1,
+		VOICE2,
 		//Voice3,
-		Voice4,
-		Explosion
+		VOICE4,
+		EXPLOSION
 		//Voice5
 	};
 
-	static Player* player;
-	static int MAX_SPEED;
+	static Player* player_;
+	static int max_speed_;
+	static int player_lives_;
 
-	static float _voice_timer;
+	static int score_;
+	static sf::Text score_text_;
 
-	static float _mine_timer;
-	static float _mine_interval;
+	static float timer_;
+	static sf::Text timer_text_;
 
+	static float voice_timer_;
+
+	static float mine_timer_;
+	static float mine_interval_;
+
+	static float fruit_timer_;
+	static float fruit_interval_;
+
+	static void IncreaseScore(int points);
 	
-	static void initialize();
+	static void Initialize();
 
-	static void initTextures();
-	static void initMusic();
-	static void initSounds();
-	static sf::Clock clock;
+	static void InitializeTextures();
+	static void InitializeMusic();
+	static void InitializeSounds();
+	static void InitializeFonts();
+	static void InitializeTexts();
+	static sf::Clock clock_;
 
 };
 
 // random number generators, engine and distribution
-static std::default_random_engine eng(Configuration::clock.getElapsedTime().asMilliseconds());
-static std::uniform_int_distribution<unsigned> res_1600(0, 1600); // for voice distribution
-static std::uniform_int_distribution<unsigned> res_900(0, 900);
+static std::default_random_engine eng(Configuration::clock_.getElapsedTime().asMilliseconds());
+static std::uniform_int_distribution<unsigned> random_0_1600(0, 1600); // for voice distribution
+static std::uniform_int_distribution<unsigned> random_0_900(0, 900);
 static std::uniform_int_distribution<unsigned> random_0_2(0, 2);
 static std::uniform_int_distribution<unsigned> random_8_14(8, 14);
 

@@ -12,26 +12,27 @@ public:
 	Entity(Configuration::Textures tex_id, World& world);
 	virtual ~Entity();
 
-	virtual bool isAlive() const; //returns state of Entity
+	virtual bool is_alive() const; //returns state of Entity
 	const sf::Vector2f getPosition() const;
 	template <typename ... Args>
 	void setPosition(Args&& ... args);	// self explainatory
-	virtual bool isCollide(const Entity& other) const = 0;
+	virtual bool IsCollide(const Entity& other) const = 0;
 
-	virtual void update(sf::Time deltaTime) = 0;
-	virtual void onDestroy();
+	virtual void Update(sf::Time deltaTime) = 0;
+	virtual void OnDestroy();
 protected:
 
 	friend class Player;
 	friend class Mine;
-	sf::Sprite _sprite;
-	sf::Vector2f _speed;
-	World& _world;
-	bool _Alive;
+	friend class Fruit;
+	sf::Sprite sprite_;
+	sf::Vector2f speed_;
+	World& world_;
+	bool alive_;
 private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 template <typename ... Args>
 void Entity::setPosition(Args&& ... args) {
-	_sprite.setPosition(std::forward<Args>(args)...);
+	sprite_.setPosition(std::forward<Args>(args)...);
 }

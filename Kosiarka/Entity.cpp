@@ -1,33 +1,33 @@
 #include "stdafx.h"
 #include "Entity.h"
 
-Entity::Entity(Configuration::Textures tex_id, World & world) : _world(world), _Alive(true)
+Entity::Entity(Configuration::Textures tex_id, World & world) : world_(world), alive_(true)
 {
-	sf::Texture& texture = Configuration::_textures.get(tex_id);
-	_sprite.setTexture(texture);
-	_sprite.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
+	sf::Texture& texture = Configuration::textures_.get(tex_id);
+	sprite_.setTexture(texture);
+	sprite_.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
 }
 
 Entity::~Entity()
 {
 }
 
-bool Entity::isAlive() const
+bool Entity::is_alive() const
 {
-	return _Alive;
+	return alive_;
 }
 
 const sf::Vector2f Entity::getPosition() const
 {
-	return _sprite.getPosition();
+	return sprite_.getPosition();
 }
 
-void Entity::onDestroy()
+void Entity::OnDestroy()
 {
-	_Alive = false;
+	alive_ = false;
 }
 
 void Entity::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-	target.draw(_sprite, states);
+	target.draw(sprite_, states);
 }

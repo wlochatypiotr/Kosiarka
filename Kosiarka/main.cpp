@@ -3,8 +3,8 @@
 #include "Configuration.h"
 int main()
 {
-	Configuration::initialize();
+	Configuration::Initialize();
 	Game game;
-	game.run(60);
+	game.Run(60);
 	return 0;
 }

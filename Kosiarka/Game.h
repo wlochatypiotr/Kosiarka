@@ -12,16 +12,16 @@ public:
 
 	Game(int x = 1600, int y = 900);
 
-	void run(int min_fps);
-	void render();
-	void processEvents();
-	void update(sf::Time deltaTime);
-	const int getX() const; 
-	const int getY() const;
+	void Run(int min_fps);
+	void Render();
+	void ProcessEvents();
+	void Update(sf::Time deltaTime);
+	const int get_x() const; 
+	const int get_y() const;
 private:
-	const int _x;			//window size
-	const int _y;
+	const int x_;			//window size
+	const int y_;
 
-	sf::RenderWindow _window;
-	World _World;
+	sf::RenderWindow window_;
+	World world_;
 };
