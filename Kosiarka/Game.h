@@ -16,8 +16,6 @@ public:
 	void Render();
 	void ProcessEvents();
 	void Update(sf::Time deltaTime);
-
-	void Reset();
 	const int get_x() const; 
 	const int get_y() const;
 private:

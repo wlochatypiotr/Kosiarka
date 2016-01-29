@@ -3,12 +3,11 @@
 #include "ResourceManager.h"
 
 class Player;
-class Fruit;
 class Configuration
 {
 public:
 	Configuration(const Configuration&) = delete;
-	Configuration & operator= (const Configuration&) = delete;
+	Configuration & operator = (const Configuration&) = delete;
 
 	Configuration() = delete;
 
@@ -32,8 +31,7 @@ public:
 		MINE,
 		APPLE,
 		PEAR,
-		CHERRY,
-		LIFE
+		CHERRY
 	};
 
 	static ResourceManager<sf::SoundBuffer, int> sounds_;
@@ -43,16 +41,11 @@ public:
 		VOICE2,
 		//Voice3,
 		VOICE4,
-		EXPLOSION,
-		EAT_APPLE,
-		EAT_CHERRY,
-		EAT_PEAR
+		EXPLOSION
 		//Voice5
 	};
 
 	static Player* player_;
-	static Fruit* fruit_;
-
 	static int max_speed_;
 	static int player_lives_;
 
@@ -69,13 +62,9 @@ public:
 
 	static float fruit_timer_;
 	static float fruit_interval_;
-	static std::vector<sf::Sprite> life_container_;
+
 	static void IncreaseScore(int points);
 	
-	static void Draw(sf::RenderTarget & target);
-
-	static bool IsGameOver();
-
 	static void Initialize();
 
 	static void InitializeTextures();
@@ -83,11 +72,6 @@ public:
 	static void InitializeSounds();
 	static void InitializeFonts();
 	static void InitializeTexts();
-
-	static void InitializeLife();
-
-	static void Reset();
-
 	static sf::Clock clock_;
 
 };
