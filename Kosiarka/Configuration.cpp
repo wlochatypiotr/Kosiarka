@@ -3,6 +3,7 @@
 #include "Random.h"
 #include "Collision.h"
 
+
 // Resource Managers
 ResourceManager<sf::Texture, int> Configuration::textures_;
 ResourceManager<sf::Music, int> Configuration::music_;
@@ -11,7 +12,7 @@ ResourceManager<sf::Font, int> Configuration::fonts_;
 
 
 Player* Configuration::player_ = nullptr;
-
+Fruit* Configuration::fruit_ = nullptr;
 //defines game difficulty
 
 int Configuration::max_speed_;
@@ -28,13 +29,10 @@ sf::Text Configuration::timer_text_;
 //stores interval between sheep's voice
 float Configuration::voice_timer_;
 
-//defines mine spwaning timing
+//defines mine spawning timing
 float Configuration::mine_timer_;
-float Configuration::mine_interval_ = 5;
+float Configuration::mine_interval_ = 0.2;
 
-//defines fruit spawning timing 
-float Configuration::fruit_timer_;
-float Configuration::fruit_interval_ = 3;
 
 std::vector<sf::Sprite> Configuration::life_container_;
 sf::Clock Configuration::clock_;
@@ -97,6 +95,9 @@ void Configuration::InitializeSounds()
 	sounds_.load(Configuration::Sounds::VOICE4, "Media/Sounds/Voice4.ogg");
 	//_sounds.load(Configuration::Sounds::Voice5, "Media/Sounds/Voice5.ogg");
 	sounds_.load(Configuration::Sounds::EXPLOSION, "Media/Sounds/Explosion.ogg");
+	sounds_.load(Configuration::Sounds::EAT_APPLE, "Media/Sounds/Apple.ogg");
+	sounds_.load(Configuration::Sounds::EAT_CHERRY, "Media/Sounds/Cherry.ogg");
+	sounds_.load(Configuration::Sounds::EAT_PEAR, "Media/Sounds/Pear.wav");
 }
 
 void Configuration::InitializeFonts()

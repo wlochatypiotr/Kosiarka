@@ -43,28 +43,11 @@ void Game::ProcessEvents()
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 				window_.close();
-			//else if (event.key.code == sf::Keyboard::Up)
-			//{
-			//	Configuration::player->_isMoving = true;
-			//	//Configuration::player->speed_ = sf::Vector2f(0, -100);
-			//}
-			///*else if (event.key.code == sf::Keyboard::Down)
-			//{
-			//	Configuration::player->_isMoving = true;
-			//	Configuration::player->speed_ = sf::Vector2f(0, 100);
-			//}*/
-			//else if (event.key.code == sf::Keyboard::Left)
-			//{
-			//	Configuration::player->rotation = -1;
-			//}
-			//else if (event.key.code == sf::Keyboard::Right)
-			//{
-			//	Configuration::player->rotation = 1;
-			//}
+
 		}
 		
 	}
-	//Configuration::player->ProcessEvents();
+
 }
 
 void Game::Update(sf::Time deltaTime)
@@ -75,10 +58,10 @@ void Game::Update(sf::Time deltaTime)
 		Configuration::player_->setPosition(sf::Vector2f(world_.get_x() / 2, world_.get_y() / 2));
 		world_.Add(Configuration::player_);
 	}
-	if(Eatable::count_ == 0)	//add new fruit when there is none
-	//if (Configuration::fruit_timer_ > Configuration::fruit_interval_) // fruit adding at fixed time
+	//Fruit adding
+	if (Configuration::fruit_ == nullptr || Eatable::count_ == 0)
 	{
-		Entity* fruit = nullptr;
+		Fruit* fruit = nullptr;
 		int i = random_0_2(eng);
 		switch (i)
 		{
@@ -95,12 +78,14 @@ void Game::Update(sf::Time deltaTime)
 		fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng)));
 		while (world_.IsCollide(*fruit))
 		{
-			fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng))); // ujednolicic randomy
+			fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng))); 
 		}
+		Configuration::fruit_ = fruit;
 		world_.Add(fruit);
-		//Configuration::fruit_timer_ = 0;
 	}
-	if (Configuration::mine_timer_ > Configuration::mine_interval_) // mine adding
+
+		//Mine adding
+	if (Configuration::mine_timer_ > Configuration::mine_interval_) 
 	{
 	
 		Entity* mine(new Mine(world_));
@@ -110,9 +95,9 @@ void Game::Update(sf::Time deltaTime)
 			mine->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng))); 
 		}
 		world_.Add(mine);
+		world_.AddMine(mine);
 		Configuration::mine_timer_ = 0;
 	}
-	//Configuration::player->update(deltaTime);
 	world_.Update(deltaTime);
 }
 

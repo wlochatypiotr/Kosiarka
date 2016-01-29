@@ -23,6 +23,7 @@ void Apple::OnDestroy()
 {
 	Fruit::OnDestroy();
 	Configuration::IncreaseScore(get_points());
+	world_.Add(Configuration::Sounds::EAT_APPLE);
 }
 
 Pear::Pear(World & world) : Fruit(Configuration::Textures::PEAR, world)
@@ -38,6 +39,7 @@ void Pear::OnDestroy()
 {
 	Fruit::OnDestroy();
 	Configuration::IncreaseScore(get_points());
+	world_.Add(Configuration::Sounds::EAT_PEAR);
 }
 
 Cherry::Cherry(World & world) : Fruit(Configuration::Textures::CHERRY, world)
@@ -53,4 +55,5 @@ void Cherry::OnDestroy()
 {
 	Fruit::OnDestroy();
 	Configuration::IncreaseScore(get_points());
+	world_.Add(Configuration::Sounds::EAT_CHERRY);
 }

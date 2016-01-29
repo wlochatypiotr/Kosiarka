@@ -1,5 +1,6 @@
 #pragma once
 #include "Eatable.h"
+#include "World.h"
 class Fruit : public Eatable
 {
 public:
