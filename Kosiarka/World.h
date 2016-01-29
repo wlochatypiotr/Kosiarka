@@ -20,13 +20,12 @@ public:
 	void Add(Configuration::Sounds sound_id);
 
 	const std::list<Entity*> get_entities()const;
-	void SetFruit(Entity* entity);
+	//void SetFruit(Entity* entity);
 	int get_size();			//entities
 	int get_x()const;
 	int get_y()const;
 	void Update(sf::Time deltaTime);
 	//Entity* next_fruit_;
-	Entity* next_fruit_;
 private:
 	std::list<Entity*> entities_;
 	//Entity* next_fruit_;

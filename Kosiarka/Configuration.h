@@ -51,7 +51,7 @@ public:
 	};
 
 	static Player* player_;
-	//static Entity* fruit_;
+	static Entity* fruit_;
 
 	static int max_speed_;
 	static int player_lives_;
