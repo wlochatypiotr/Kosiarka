@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 
 class Player;
-class Entity;
+class Fruit;
 class Configuration
 {
 public:
@@ -51,7 +51,7 @@ public:
 	};
 
 	static Player* player_;
-	static Entity* fruit_;
+	static Fruit* fruit_;
 
 	static int max_speed_;
 	static int player_lives_;

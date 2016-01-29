@@ -45,22 +45,21 @@ void Game::ProcessEvents()
 		{
 			if (event.key.code == sf::Keyboard::Escape)
 				window_.close();
+		}	
+		if (Configuration::IsGameOver())
+		{
+			if (event.type == sf::Event::KeyPressed) //keyboard input
+				Reset();
 		}
-		//	if (Configuration::IsGameOver())
-		//	{
-		//		if (event.type == sf::Event::KeyPressed) //keyboard input
-		//			Reset();
-		//	}
-		//	else
-		//	{
-		//		if (Configuration::player_ != nullptr)
-		//			Configuration::player_->ProcessEvents();
-		//	}
-		//}
-		//if (!Configuration::IsGameOver() && Configuration::player_ != nullptr)
-		//	Configuration::player_->ProcessEvents();
+		else
+		{
+			if (Configuration::player_ != nullptr)
+				Configuration::player_->ProcessEvents();
+		}
 	}
-}
+	if (!Configuration::IsGameOver() && Configuration::player_ != nullptr)
+		Configuration::player_->ProcessEvents();
+	}
 
 
 void Game::Update(sf::Time deltaTime)
@@ -73,36 +72,9 @@ void Game::Update(sf::Time deltaTime)
 			Configuration::player_->setPosition(sf::Vector2f(world_.get_x() / 2, world_.get_y() / 2));
 			world_.Add(Configuration::player_);
 		}
-		if (Configuration::fruit_ == nullptr)
-		{
-			Entity* fruit = nullptr;
-			int i = random_0_2(eng);
-			switch (i)
-			{
-			case 0:
-				fruit = new Apple(world_);
-				break;
-			case 1:
-				fruit = new Pear(world_);
-				break;
-			case 2:
-				fruit = new Cherry(world_);
-				break;
-			}
-			fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng)));
-			while (world_.IsCollide(*fruit))
-			{
-				fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng)));
-			}
-			Configuration::fruit_ = fruit;
-			world_.Add(fruit);
-		}
-	
-
-		//if (world_.next_fruit_ == nullptr ||Eatable::count_ == 0)	//add new fruit when there is none
-		////if (Configuration::fruit_timer_ > Configuration::fruit_interval_) // fruit adding at fixed time
+		//if (Configuration::fruit_ == nullptr)
 		//{
-		//	Entity* fruit = nullptr;
+		//	Fruit* fruit = nullptr;
 		//	int i = random_0_2(eng);
 		//	switch (i)
 		//	{
@@ -121,9 +93,34 @@ void Game::Update(sf::Time deltaTime)
 		//	{
 		//		fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng))); // ujednolicic randomy
 		//	}
-		//	world_.SetFruit(fruit);
-		//	//Configuration::fruit_timer_ = 0;
+		//	Configuration::fruit_ = fruit;
 		//}
+	
+		if (world_.next_fruit_ == nullptr ||Eatable::count_ == 0)	//add new fruit when there is none
+		//if (Configuration::fruit_timer_ > Configuration::fruit_interval_) // fruit adding at fixed time
+		{
+			Entity* fruit = nullptr;
+			int i = random_0_2(eng);
+			switch (i)
+			{
+			case 0:
+				fruit = new Apple(world_);
+				break;
+			case 1:
+				fruit = new Pear(world_);
+				break;
+			case 2:
+				fruit = new Cherry(world_);
+				break;
+			}
+			fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng)));
+			while (world_.IsCollide(*fruit))
+			{
+				fruit->setPosition(sf::Vector2f(random_0_1600(eng), random_0_900(eng))); // ujednolicic randomy
+			}
+			world_.SetFruit(fruit);
+			//Configuration::fruit_timer_ = 0;
+		}
 		if (Configuration::mine_timer_ > Configuration::mine_interval_) // mine adding
 		{
 
@@ -145,7 +142,6 @@ void Game::Reset()
 {
 	world_.Clear();
 	Configuration::player_ = nullptr;
-	Configuration::fruit_ = nullptr;
 	Configuration::Reset();
 }
 
