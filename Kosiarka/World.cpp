@@ -62,6 +62,15 @@ int World::get_y() const
 	return y_;
 }
 
+void World::clear()
+{
+	for (Entity* entity : entities_)
+		delete entity;
+	entities_.clear();
+	mines_.clear();
+	sounds_.clear();
+}
+
 void World::Update(sf::Time deltaTime)
 {
 	Configuration::mine_timer_ += deltaTime.asSeconds();

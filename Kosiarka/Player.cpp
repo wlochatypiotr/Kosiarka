@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-Player::Player(World& world) : Entity(Configuration::Textures::SHEEP, world), is_moving_(false), rotation_(0)
+Player::Player(World& world) : Entity(Configuration::Textures::SHEEP, world), is_moving_(true), rotation_(random_0_180(eng))
 {
 }
 
@@ -47,6 +47,7 @@ void Player::ProcessEvents()
 void Player::OnDestroy()
 {
 	--Configuration::player_lives_;
+	//world_.Add(Configuration::SCREAM);
 	this->setPosition(sf::Vector2f(world_.get_x() / 2, world_.get_y() / 2));  
 }
 
