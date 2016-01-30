@@ -7,6 +7,7 @@ class Player;
 class Game
 {
 public:
+	friend class Configuration;
 	Game(const Game&) = delete;
 	Game& operator= (const Game&) = delete;
 
@@ -15,6 +16,7 @@ public:
 	void Run(int min_fps);
 	void Render();
 	void ProcessEvents();
+	void Reset();
 	void Update(sf::Time deltaTime);
 	const int get_x() const; 
 	const int get_y() const;

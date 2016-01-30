@@ -46,7 +46,8 @@ public:
 		EXPLOSION,
 		EAT_APPLE,
 		EAT_CHERRY,
-		EAT_PEAR
+		EAT_PEAR,
+		SCREAM
 		//Voice5
 	};
 
@@ -61,6 +62,8 @@ public:
 	static float timer_;
 	static sf::Text timer_text_;
 
+	static sf::Text txt_;
+
 	static float voice_timer_;
 
 	static float mine_timer_;
@@ -71,6 +74,8 @@ public:
 	static void IncreaseScore(int points);
 	
 	static void Draw(sf::RenderTarget & target);
+	static bool IsGameOver();
+	static void Reset();
 
 	static void Initialize();
 
@@ -90,4 +95,5 @@ static std::uniform_int_distribution<unsigned> random_0_1600(0, 1600);
 static std::uniform_int_distribution<unsigned> random_0_900(0, 900);
 static std::uniform_int_distribution<unsigned> random_0_2(0, 2);
 static std::uniform_int_distribution<unsigned> random_8_14(8, 14);
+static std::uniform_int_distribution<unsigned> random_0_180(0, 180);
 

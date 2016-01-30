@@ -3,8 +3,9 @@
 #include "Entity.h"
 #include "Mine.h"
 #include "Fruit.h"
-class Entity;
 #include "Player.h"
+
+class Entity;
 class Mine;
 class World : public sf::Drawable
 {
@@ -24,6 +25,7 @@ public:
 	const std::list<Entity*> get_entities()const;
 	int get_x()const;
 	int get_y()const;
+	void clear();
 	void Update(sf::Time deltaTime);
 private:
 	std::list<Entity*> entities_;
