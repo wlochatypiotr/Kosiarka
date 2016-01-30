@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 
 class Player;
+class Fruit;
 class Configuration
 {
 public:
@@ -45,11 +46,13 @@ public:
 		EXPLOSION,
 		EAT_APPLE,
 		EAT_CHERRY,
-		EAT_PEAR
+		EAT_PEAR,
+		SCREAM
 		//Voice5
 	};
 
 	static Player* player_;
+	static Fruit* fruit_;
 	static int max_speed_;
 	static int player_lives_;
 
@@ -59,19 +62,20 @@ public:
 	static float timer_;
 	static sf::Text timer_text_;
 
+	static sf::Text txt_;
+
 	static float voice_timer_;
 
 	static float mine_timer_;
 	static float mine_interval_;
-
-	static float fruit_timer_;
-	static float fruit_interval_;
 
 	static std::vector<sf::Sprite> life_container_;
 
 	static void IncreaseScore(int points);
 	
 	static void Draw(sf::RenderTarget & target);
+	static bool IsGameOver();
+	static void Reset();
 
 	static void Initialize();
 
@@ -87,8 +91,9 @@ public:
 
 // random number generators, engine and distribution
 static std::default_random_engine eng(Configuration::clock_.getElapsedTime().asMilliseconds());
-static std::uniform_int_distribution<unsigned> random_0_1600(0, 1600); // for voice distribution
+static std::uniform_int_distribution<unsigned> random_0_1600(0, 1600);
 static std::uniform_int_distribution<unsigned> random_0_900(0, 900);
 static std::uniform_int_distribution<unsigned> random_0_2(0, 2);
 static std::uniform_int_distribution<unsigned> random_8_14(8, 14);
+static std::uniform_int_distribution<unsigned> random_0_180(0, 180);
 

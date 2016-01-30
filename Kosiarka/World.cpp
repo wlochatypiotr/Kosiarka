@@ -17,6 +17,11 @@ void World::Add(Entity * entity)
 	entities_.push_back(entity);
 }
 
+void World::AddMine(Entity * entity)
+{
+	mines_.push_back(entity);
+}
+
 void World::Clear()
 {
 	for (Entity* entity : entities_)
@@ -26,16 +31,13 @@ void World::Clear()
 
 bool World::IsCollide(const Entity & other)
 {
-	for (Entity* entity_ptr : entities_)
+	for (Entity* entity_ptr : mines_)
 		if (other.IsCollide(*entity_ptr))
 			return true;
+
 	return false;
 }
 
-int World::get_size()
-{
-	return entities_.size();
-}
 
 void World::Add(Configuration::Sounds sound_id)
 {
@@ -60,77 +62,83 @@ int World::get_y() const
 	return y_;
 }
 
+void World::clear()
+{
+	for (Entity* entity : entities_)
+		delete entity;
+	entities_.clear();
+	mines_.clear();
+	sounds_.clear();
+}
+
 void World::Update(sf::Time deltaTime)
 {
 	Configuration::mine_timer_ += deltaTime.asSeconds();
-	//Configuration::fruit_timer_ += deltaTime.asSeconds();
+
 	Configuration::voice_timer_ += deltaTime.asMilliseconds();			
 	if (Configuration::voice_timer_ >= random_8_14(eng) * 1000)		//randomize voice interval
 	{
-		std::unique_ptr<sf::Sound> sound(new sf::Sound(Configuration::sounds_.get(random_0_2(eng)))); // get random voice
-		sound->setAttenuation(0);
-		sound->play();
-		sounds_.emplace_back(std::move(sound));
-		//std::cout << "voice" << "\n";	//helper
-		Configuration::voice_timer_ = 0;		//reset voice intervall timer
+		Add(Configuration::Sounds (random_0_2(eng)));
+		Configuration::voice_timer_ = 0;		//reset voice interval timer
 	}
-	//Entity* entity_ptr = *_entities.begin();	// update only player since rest of entities doesnt move
-	for (Entity* entity_ptr : entities_)		// formula to update all
-	{
-		
-	entity_ptr->Update(deltaTime);
-		auto pos = entity_ptr->getPosition();				//torus space
-		sf::Vector2f new_pos;
+
+		//update player
+	Configuration::player_->Update(deltaTime);
+		auto pos = Configuration::player_->getPosition();				//torus space
 		if (pos.x > x_)
-			entity_ptr->setPosition(sf::Vector2f(0,pos.y));
+			Configuration::player_->setPosition(sf::Vector2f(0,pos.y));
 		if (pos.x < 0)
-			entity_ptr->setPosition(sf::Vector2f(x_, pos.y));
+			Configuration::player_->setPosition(sf::Vector2f(x_, pos.y));
 		if(pos.y > y_)
-			entity_ptr->setPosition(sf::Vector2f(pos.x, 0));
+			Configuration::player_->setPosition(sf::Vector2f(pos.x, 0));
 		if(pos.y < 0)
-			entity_ptr->setPosition(sf::Vector2f(pos.x, y_));
+			Configuration::player_->setPosition(sf::Vector2f(pos.x, y_));
 
-	}
-	//std::cout << Configuration::voice_timer_ << "\n";	//helper
-	//std::cout << Configuration::mine_timer_ << "\n";
-	//std::cout << Configuration::clock_.getElapsedTime().asSeconds() << "\n";
+	
 	//check for collisions
-
-	const auto end = entities_.end();
-
-	for (auto it_i = entities_.begin(); it_i != end; ++it_i)	//ANALIZA !!!!!!!!
+	const auto end = mines_.end();
+	
+	for (auto it = mines_.begin(); it != end; ++it)
 	{
-		Entity& entity_i = **it_i;
-		auto it_j = it_i;			//it_j its an iterator to entity next to entity_i
-		it_j++;
-		for (; it_j != end; ++it_j)
+		Entity& mine = **it;
+		if (Configuration::player_->is_alive() && Configuration::player_->IsCollide(mine))
 		{
-			Entity& entity_j = **it_j;
-
-			if (entity_i.is_alive() && entity_i.IsCollide(entity_j))
-			{
-				entity_i.OnDestroy();
-				entity_j.OnDestroy();
-			}
-			if (entity_j.is_alive() && entity_j.IsCollide(entity_i))
-				entity_j.OnDestroy();
+			Configuration::player_->OnDestroy();
+			mine.OnDestroy();
 		}
 	}
-	for (auto it = entities_.begin(); it != entities_.end();)	//remove dead entities
+
+	//Check for collision with fruit
+	if (Configuration::player_->is_alive() && Configuration::player_->IsCollide(*Configuration::fruit_))
+		Configuration::fruit_->OnDestroy();
+
+	//remove dead mines for the list
+	for (auto it = mines_.begin(); it != mines_.end();)
+	{
+		if (!(*it)->is_alive())
+		{							
+			it = mines_.erase(it);
+		}
+		else
+			++it;
+	}
+	//remove destroyed mines, eaten fruits and free memory
+	for (auto it = entities_.begin(); it != entities_.end();)	
 	{
 		if (!(*it)->is_alive())
 		{
-			delete *it;
+			delete *it;			// free memory
 			it = entities_.erase(it);
 		}
 		else
 			++it;
 	}
 
-
 	sounds_.remove_if([](const std::unique_ptr<sf::Sound>& sound) -> bool {		// remove unused sounds
 		return sound->getStatus() != sf::Sound::Status::Playing;
 	});
+
+	//update score string
 	Configuration::score_text_.setString(std::string("SCORE: ") + std::to_string(Configuration::score_)); // update score text
 
 

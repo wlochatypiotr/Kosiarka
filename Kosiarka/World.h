@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "Mine.h"
 #include "Fruit.h"
+#include "Player.h"
+
 class Entity;
 class Mine;
 class World : public sf::Drawable
@@ -14,18 +16,20 @@ public:
 	~World();
 
 	void Add(Entity* entity);
+	void AddMine(Entity* entity);
 	void Clear();	//Entities
 	bool IsCollide(const Entity& other);
 
 	void Add(Configuration::Sounds sound_id);
 
 	const std::list<Entity*> get_entities()const;
-	int get_size();			//entities
 	int get_x()const;
 	int get_y()const;
+	void clear();
 	void Update(sf::Time deltaTime);
 private:
 	std::list<Entity*> entities_;
+	std::list<Entity*> mines_;
 	
 	std::list < std::unique_ptr<sf::Sound>> sounds_;
 	sf::Sprite background_;

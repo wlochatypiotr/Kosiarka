@@ -2,6 +2,8 @@
 #include "Configuration.h"
 #include "Random.h"
 #include "Collision.h"
+#include "Game.h"
+
 
 // Resource Managers
 ResourceManager<sf::Texture, int> Configuration::textures_;
@@ -11,7 +13,7 @@ ResourceManager<sf::Font, int> Configuration::fonts_;
 
 
 Player* Configuration::player_ = nullptr;
-
+Fruit* Configuration::fruit_ = nullptr;
 //defines game difficulty
 
 int Configuration::max_speed_;
@@ -25,16 +27,15 @@ sf::Text Configuration::score_text_;
 float Configuration::timer_;
 sf::Text Configuration::timer_text_;
 
+sf::Text Configuration::txt_;
+
 //stores interval between sheep's voice
 float Configuration::voice_timer_;
 
-//defines mine spwaning timing
+//defines mine spawning timing
 float Configuration::mine_timer_;
-float Configuration::mine_interval_ = 5;
+float Configuration::mine_interval_ = 4;
 
-//defines fruit spawning timing 
-float Configuration::fruit_timer_;
-float Configuration::fruit_interval_ = 3;
 
 std::vector<sf::Sprite> Configuration::life_container_;
 sf::Clock Configuration::clock_;
@@ -57,9 +58,26 @@ void Configuration::Draw(sf::RenderTarget & target)
 		}
 }
 
-void Configuration::Initialize()
+bool Configuration::IsGameOver()
+{
+	return player_lives_ < 0;
+}
+
+void Configuration::Reset()
 {
 	max_speed_ = 300;
+	player_lives_ = 3;
+	score_ = 0;
+	score_text_.setString("SCORE: ");
+	timer_ = 0;
+	voice_timer_ = 0;
+	mine_timer_ = 0;
+	clock_.restart();
+}
+
+void Configuration::Initialize()
+{
+
 	InitializeTextures();
 	InitializeSounds();
 	InitializeMusic();
@@ -67,6 +85,7 @@ void Configuration::Initialize()
 	InitializeTexts();
 	InitializeLife();
 
+	player_lives_ = -1;
 
 	music_.get(Configuration::Music::THEME).setLoop(true);
 	music_.get(Configuration::Music::THEME).play();
@@ -97,6 +116,10 @@ void Configuration::InitializeSounds()
 	sounds_.load(Configuration::Sounds::VOICE4, "Media/Sounds/Voice4.ogg");
 	//_sounds.load(Configuration::Sounds::Voice5, "Media/Sounds/Voice5.ogg");
 	sounds_.load(Configuration::Sounds::EXPLOSION, "Media/Sounds/Explosion.ogg");
+	sounds_.load(Configuration::Sounds::EAT_APPLE, "Media/Sounds/Apple.ogg");
+	sounds_.load(Configuration::Sounds::EAT_CHERRY, "Media/Sounds/Cherry.ogg");
+	sounds_.load(Configuration::Sounds::EAT_PEAR, "Media/Sounds/Pear.wav");
+	sounds_.load(Configuration::Sounds::SCREAM, "Media/Sounds/Scream.ogg");
 }
 
 void Configuration::InitializeFonts()
@@ -118,6 +141,14 @@ void Configuration::InitializeTexts()
 	timer_text_.setCharacterSize(40);
 	timer_text_.setColor(sf::Color::White);
 	timer_text_.setPosition(sf::Vector2f(20, 50));
+
+	txt_.setFont(Configuration::fonts_.get(AIRSTRIKEACAD));
+	txt_.setCharacterSize(80);
+	txt_.setColor(sf::Color::Black);
+	sf::FloatRect size = txt_.getGlobalBounds();
+	txt_.setOrigin(size.width / 2, size.height / 2);
+	txt_.setPosition(sf::Vector2f(200, 350));
+	txt_.setString("PRESS ANY KEY TO CONTINUE");
 }
 
 void Configuration::InitializeLife()

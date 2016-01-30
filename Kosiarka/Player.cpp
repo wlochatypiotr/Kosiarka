@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
-Player::Player(World& world) : Entity(Configuration::Textures::SHEEP, world), is_moving_(false), rotation_(0)
+Player::Player(World& world) : Entity(Configuration::Textures::SHEEP, world), is_moving_(true), rotation_(random_0_180(eng))
 {
 }
 
@@ -8,9 +8,7 @@ Player::Player(World& world) : Entity(Configuration::Textures::SHEEP, world), is
 
 bool Player::IsCollide(const Entity & other) const
 {
-	return Collision::CircleTest(sprite_, other.sprite_);
-	//return	Collision::PixelPerfectTest(sprite_, other.sprite_);
-	//return Collision::BoundingBoxTest(sprite_, other.sprite_);
+	return	Collision::PixelPerfectTest(sprite_, other.sprite_);
 }
 
 void Player::Update(sf::Time deltaTime)
@@ -26,11 +24,11 @@ void Player::Update(sf::Time deltaTime)
 	{
 		float angle = sprite_.getRotation() / 180 * M_PI - M_PI / 2;
 		speed_ = sf::Vector2f(Configuration::max_speed_ * std::cos(angle), Configuration::max_speed_ * std::sin(angle));
-		//speed_ += sf::Vector2f(std::cos(angle), std::sin(angle)) * 100.f * seconds; ship like movement
+		//speed_ += sf::Vector2f(std::cos(angle), std::sin(angle)) * 100.f * seconds; //ship like movement
 	}
 	sprite_.move(seconds * speed_);
 	rotation_ = 0;
-	//_isMoving = 0;
+	//is_moving_ = 0;
 }
 
 void Player::ProcessEvents()
@@ -49,7 +47,8 @@ void Player::ProcessEvents()
 void Player::OnDestroy()
 {
 	--Configuration::player_lives_;
-	this->setPosition(sf::Vector2f(world_.get_x() / 2, world_.get_y() / 2)); // works for fruits too ! 
+	//world_.Add(Configuration::SCREAM);
+	this->setPosition(sf::Vector2f(world_.get_x() / 2, world_.get_y() / 2));  
 }
 
 
